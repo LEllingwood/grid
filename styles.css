@@ -1,0 +1,23 @@
+.grid {
+    /* border: 2px solid black; */
+}
+.row {
+    /* display block by default */
+    /* width is forced by cells, but height needs to be same */
+    height: 30px;
+}
+.cell {
+    height: 30px;
+    width: 30px;
+    /* shouldnt be blocks b/c should be next to others; culd do flexbox stuff */
+    display: inline-block;
+}
+.brown-border {
+    border: 1px dotted brown;
+}
+.black-border {
+    border: 1px dotted black;
+}
+.blue-border {
+    border: 1px dotted blue;
+}
