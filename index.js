@@ -8,7 +8,48 @@ class Grid {
         this.rows = [];
         this.createRows();
         this.gridElement.addEventListener("click", this.clickEvent.bind(this));
-        console.log(this)
+        console.log(this);
+        this.coordinates = [
+            {
+            rowOffset: 1,
+            colOffset: 0
+            //  below
+        },
+        {
+            rowOffset: -1,
+            colOffset: 0,
+            //  above
+        },
+        {
+            rowOffset: 0,
+            colOffset: -1
+            //  left
+        },
+        {
+            rowOffset: 0,
+            colOffset: 1
+            //  right
+        },
+        {
+            rowOffset: -1,
+            colOffset: -1,
+            // top left
+        },
+        {
+            rowOffset: 1,
+            colOffset: 1,
+            // bottom right
+        },
+        {
+            rowOffset: 1,
+            colOffset: -1,
+            // bottom left
+        },
+        {
+            rowOffset: -1,
+            colOffset: 1
+        }
+    ]
     }
 
     // general for all prototypes; methods
@@ -76,54 +117,18 @@ class Grid {
 
     findSurroundingCells(rowIndex, colIndex) {
         let neighborArray= []
-        let coordinates = [
-            {
-            rowOffset: 1,
-            colOffset: 0
-            //  below
-        },
-        {
-            rowOffset: -1,
-            colOffset: 0,
-            //  above
-        },
-        {
-            rowOffset: 0,
-            colOffset: -1
-            //  left
-        },
-        {
-            rowOffset: 0,
-            colOffset: 1
-            //  right
-        },
-        {
-            rowOffset: -1,
-            colOffset: -1,
-            // top left
-        },
-        {
-            rowOffset: 1,
-            colOffset: 1,
-            // bottom right
-        },
-        {
-            rowOffset: 1,
-            colOffset: -1,
-            // bottom left
-        },
-        {
-            rowOffset: -1,
-            colOffset: 1
-        }
-    ]
-        ;
-        for (let i = 0; i < coordinates.length; i++) {
-            neighborArray.push(this.findCellByIndexes(rowIndex + coordinates[i].rowOffset, colIndex + coordinates[i].colOffset))
+        for (let i = 0; i < this.coordinates.length; i++) {
+            let neighbor = this.findCellByIndexes(rowIndex + this.coordinates[i].rowOffset, colIndex + this.coordinates[i].colOffset);
+            // if (neighbor !== null){
+            // neighborArray.push(neighbor)
+            // }
+            neighbor != null ? neighborArray.push(neighbor) : null
         }
         return neighborArray;
     }
 }
+
+// look for if else statements to convert into ternary operators
 
 class Cell {
     constructor(rowIndex, colIndex, cellClasses) {
@@ -143,19 +148,6 @@ class Cell {
         return element;
     }
 }
-
-// const above = this.findCellByIndexes(rowIndex - 1, colIndex);
-//         const aboveRight = this.findCellByIndexes(rowIndex - 1, colIndex + 1);
-//         const right = this.findCellByIndexes(rowIndex, colIndex + 1);
-//         const belowRight = this.findCellByIndexes(rowIndex + 1, colIndex + 1);
-//         const below = this.findCellByIndexes(rowIndex + 1, colIndex);
-//         const belowLeft = this.findCellByIndexes(rowIndex + 1, colIndex -1);
-//         const left = this.findCellByIndexes(rowIndex, colIndex - 1);
-//         const aboveLeft = this.findCellByIndexes(rowIndex - 1, colIndex - 1);
-//         const clickedCellNeighbors = [above, aboveRight, right, belowRight, below, belowLeft, left, aboveLeft];
-//         console.log("index", clickedCell);
-//         console.log("Neighbor Indexes (clockwise from top): ", clickedCellNeighbors);
-
 
 const genericGrid = new Grid({
     numberOfRows: 10,
