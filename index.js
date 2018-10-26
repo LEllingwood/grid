@@ -1,28 +1,40 @@
 class Grid {
-    constructor (options) {
+    constructor(options) {
         this.numberOfRows = options.numberOfRows;
         this.numberOfColumns = options.numberOfColumns;
-        this.targetElement = options.targetElement || document.body; 
+        this.targetElement = options.targetElement || document.body;
         this.cellClasses = options.cellClasses || [];
         this.gridElement = this.createGridElement();
         this.rows = [];
         this.createRows();
-        this.gridElement.addEventListener("click", this.clickEvent.bind(this)); 
+        this.gridElement.addEventListener("click", this.clickEvent.bind(this));
         console.log(this)
     }
 
     // general for all prototypes; methods
     clickEvent(event) {
-        if(!event.target.classList.contains("cell")) return;
+        if (!event.target.classList.contains("cell")) return;
         const cellElement = event.target;
         console.log(cellElement);
         console.log("Row Index:", cellElement.dataset.rowIndex, "| Column Index:", cellElement.dataset.colIndex);
         const rowIndex = Number(cellElement.dataset.rowIndex);
         const colIndex = Number(cellElement.dataset.colIndex);
         const clickedCell = this.findCellByIndexes(rowIndex, colIndex);
-        const clickedCellBelow = this.findCellByIndexes(rowIndex + 1, colIndex); 
-        console.log("index",clickedCell);
-        console.log("index below",clickedCellBelow);
+        const neighborCells = this.findSurroundingCells(rowIndex, colIndex);
+
+        // const clickedCellBelow = this.findCellByIndexes(rowIndex + 1, colIndex);
+        // const clickedCellBelowLeft = this.findCellByIndexes(rowIndex + 1, colIndex - 1);
+        // const clickedCellBelowRight = this.findCellByIndexes(rowIndex + 1, colIndex + 1);
+        // const clickedCellLeft = this.findCellByIndexes(rowIndex, colIndex - 1);
+        // const clickedCellTopLeft = this.findCellByIndexes(rowIndex - 1, colIndex - 1);
+        // const clickedCellTopRight = this.findCellByIndexes(rowIndex - 1, colIndex + 1);
+        // const clickedCellTop = this.findCellByIndexes(rowIndex - 1, colIndex);
+        console.log(neighborCells, "yeah");
+        console.log("index", clickedCell);
+        // console.log("index below", clickedCellBelow);
+        // console.log("index below right", clickedCellBelowRight);
+        // console.log("index top left", clickedCellTopLeft);
+        // console.log("index top", clickedCellTop);
     }
 
     createGridElement() {
@@ -61,10 +73,60 @@ class Grid {
         const cell = row ? row[colIndex] : null;
         return cell || null;
     }
+
+    findSurroundingCells(rowIndex, colIndex) {
+        let neighborArray= []
+        let coordinates = [
+            {
+            rowOffset: 1,
+            colOffset: 0
+            //  below
+        },
+        {
+            rowOffset: -1,
+            colOffset: 0,
+            //  above
+        },
+        {
+            rowOffset: 0,
+            colOffset: -1
+            //  left
+        },
+        {
+            rowOffset: 0,
+            colOffset: 1
+            //  right
+        },
+        {
+            rowOffset: -1,
+            colOffset: -1,
+            // top left
+        },
+        {
+            rowOffset: 1,
+            colOffset: 1,
+            // bottom right
+        },
+        {
+            rowOffset: 1,
+            colOffset: -1,
+            // bottom left
+        },
+        {
+            rowOffset: -1,
+            colOffset: 1
+        }
+    ]
+        ;
+        for (let i = 0; i < coordinates.length; i++) {
+            neighborArray.push(this.findCellByIndexes(rowIndex + coordinates[i].rowOffset, colIndex + coordinates[i].colOffset))
+        }
+        return neighborArray;
+    }
 }
 
 class Cell {
-    constructor (rowIndex, colIndex, cellClasses) {
+    constructor(rowIndex, colIndex, cellClasses) {
         this.rowIndex = rowIndex;
         this.colIndex = colIndex;
         this.cellClasses = cellClasses || [];
@@ -75,7 +137,7 @@ class Cell {
     createElement() {
         const element = document.createElement("div");
         element.classList.add("cell", ...this.cellClasses);
-        element.cellInstance = this; 
+        element.cellInstance = this;
         element.dataset.rowIndex = this.rowIndex;
         element.dataset.colIndex = this.colIndex;
         return element;
@@ -108,4 +170,3 @@ const genericGrid2 = new Grid({
     targetElement: document.querySelector("main"),
     cellClasses: ["blue-border"],
 });
-
